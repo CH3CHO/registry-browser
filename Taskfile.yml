@@ -15,8 +15,8 @@ includes:
   windows: ./build/windows/Taskfile.yml
   darwin: ./build/darwin/Taskfile.yml
   linux: ./build/linux/Taskfile.yml
-  ios: ./build/ios/Taskfile.yml
-  android: ./build/android/Taskfile.yml
+  # 移动端目标不随仓库提供（build/ios 与 build/android 未纳入版本管理），
+  # 因此这里不再 include 它们 —— 否则全新 clone 后任何 wails3 任务都会因找不到文件而失败。
 
 tasks:
   build:
