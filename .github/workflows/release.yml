@@ -9,6 +9,11 @@ on:
 permissions:
   contents: write
 
+# 同一个 tag 不并发跑两轮发布任务
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     name: ${{ matrix.asset }}
