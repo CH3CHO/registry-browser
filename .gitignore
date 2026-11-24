@@ -1,0 +1,26 @@
+# Wails
+.task/
+.wails/
+bin/
+dist/
+frontend/dist/
+frontend/node_modules/
+frontend/bindings/
+
+# Go
+*.exe
+*.test
+coverage.out
+
+# 便携模式下的本地数据目录（配置与缓存）
+data/
+
+# 工具产物
+.code-review-graph/
+
+# 交叉编译产生的中间文件（zig 会漏出 "-.o" 这类怪名字）
+*.o
+
+# 移动端脚手架：本项目只交付 Windows 与 macOS
+build/android/
+build/ios/

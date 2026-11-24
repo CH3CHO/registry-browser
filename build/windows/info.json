@@ -1,0 +1,17 @@
+{
+	"fixed": {
+		"file_version": "0.1.0",
+		"product_version": "0.1.0"
+	},
+	"info": {
+		"0409": {
+			"FileVersion": "0.1.0",
+			"ProductVersion": "0.1.0",
+			"CompanyName": "ch3cho",
+			"FileDescription": "只读的容器镜像仓库浏览器",
+			"LegalCopyright": "(c) 2026, ch3cho",
+			"ProductName": "Registry Browser",
+			"Comments": "浏览镜像仓库中的镜像与 tag"
+		}
+	}
+}

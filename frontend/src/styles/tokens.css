@@ -1,0 +1,103 @@
+/*
+ * 设计令牌：瑞士 / 数据密集风格。
+ * 浅色为主，跟随系统切换深色；所有颜色、间距、字号只在这里定义。
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---- 颜色：语义化 ---- */
+  --surface-page: #fafaf7;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f2f2ee;
+  --surface-hover: #ecece7;
+  --surface-selected: #e6edf7;
+
+  --border-hairline: #e0e0d9;
+  --border-strong: #c9c9c0;
+
+  --text-primary: #17170f;
+  --text-secondary: #5c5c52;
+  --text-tertiary: #8a8a7e;
+  --text-inverse: #fafaf7;
+
+  --accent: #17457a;
+  --accent-hover: #0f3359;
+  --accent-soft: #e6edf7;
+
+  --status-ok: #1f6b45;
+  --status-ok-soft: #e4f0e8;
+  --status-warn: #8a5a12;
+  --status-warn-soft: #f6ecdd;
+  --status-error: #9c2b23;
+  --status-error-soft: #f8e6e4;
+
+  /* ---- 字体 ---- */
+  --font-ui: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', Menlo, monospace;
+
+  --text-xs: 0.6875rem;   /* 11px —— 表格辅助信息 */
+  --text-sm: 0.75rem;     /* 12px —— 表格正文 */
+  --text-md: 0.8125rem;   /* 13px —— 界面正文 */
+  --text-lg: 1rem;        /* 16px —— 面板标题 */
+  --text-xl: 1.375rem;    /* 22px —— 区块标题 */
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* ---- 间距 ---- */
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 24px;
+  --space-7: 32px;
+
+  /* ---- 圆角与阴影 ---- */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+
+  --shadow-panel: 0 1px 2px rgba(23, 23, 15, 0.04);
+  --shadow-overlay: 0 8px 24px rgba(23, 23, 15, 0.12);
+
+  /* ---- 动效 ---- */
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-page: #14140f;
+    --surface-raised: #1c1c17;
+    --surface-sunken: #191913;
+    --surface-hover: #24241d;
+    --surface-selected: #1d2a3a;
+
+    --border-hairline: #2c2c25;
+    --border-strong: #3d3d34;
+
+    --text-primary: #ece9df;
+    --text-secondary: #a3a396;
+    --text-tertiary: #6f6f64;
+
+    --accent: #7fa8dd;
+    --accent-hover: #9cbfe8;
+    --accent-soft: #1d2a3a;
+
+    --status-ok: #6fbf95;
+    --status-ok-soft: #1b2a22;
+    --status-warn: #d0a55f;
+    --status-warn-soft: #2b2418;
+    --status-error: #dd8078;
+    --status-error-soft: #2e1d1b;
+
+    --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.55);
+  }
+}

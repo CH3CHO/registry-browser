@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Registry Browser
+Comment=只读的容器镜像仓库浏览器
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/registry-browser %u
+Terminal=false
+Type=Application
+Icon=registry-browser
+Categories=Utility;
+StartupWMClass=registry-browser
+
+ 

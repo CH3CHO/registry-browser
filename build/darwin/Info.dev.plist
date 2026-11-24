@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>CFBundleExecutable</key>
+		<string>registry-browser</string>
+		<key>CFBundleGetInfoString</key>
+		<string>浏览镜像仓库中的镜像与 tag</string>
+		<key>CFBundleIconFile</key>
+		<string>icons</string>
+		<key>CFBundleIconName</key>
+		<string>appicon</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.ch3cho.registrybrowser</string>
+		<key>CFBundleName</key>
+		<string>Registry Browser</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>0.1.0</string>
+		<key>CFBundleVersion</key>
+		<string>0.1.0</string>
+		<key>LSMinimumSystemVersion</key>
+		<string>12.0.0</string>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsLocalNetworking</key>
+			<true/>
+		</dict>
+		<key>NSHighResolutionCapable</key>
+		<string>true</string>
+		<key>NSHumanReadableCopyright</key>
+		<string>(c) 2026, ch3cho</string>
+	</dict>
+</plist>

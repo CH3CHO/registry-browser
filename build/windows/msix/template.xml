@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MsixPackagingToolTemplate
+    xmlns="http://schemas.microsoft.com/msix/packaging/msixpackagingtool/template/2022">
+    <Settings
+        AllowTelemetry="false"
+        ApplyACLsToPackageFiles="true"
+        GenerateCommandLineFile="true"
+        AllowPromptForPassword="false">
+    </Settings>
+    <Installer
+        Path="registry-browser.exe"
+        Arguments=""
+        InstallLocation="C:\Program Files\ch3cho\Registry Browser">
+    </Installer>
+    <PackageInformation
+        PackageName="Registry Browser"
+        PackageDisplayName="Registry Browser"
+        PublisherName="CN=ch3cho"
+        PublisherDisplayName="ch3cho"
+        Version="0.1.0.0"
+        PackageDescription="A registry-browser application">
+        <Capabilities>
+            <Capability Name="runFullTrust" />
+            
+        </Capabilities>
+        <Applications>
+            <Application
+                Id="com.example.registrybrowser"
+                Description="A registry-browser application"
+                DisplayName="Registry Browser"
+                ExecutableName="registry-browser.exe"
+                EntryPoint="Windows.FullTrustApplication">
+                
+            </Application>
+        </Applications>
+        <Resources>
+            <Resource Language="en-us" />
+        </Resources>
+        <Dependencies>
+            <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+        </Dependencies>
+        <Properties>
+            <Framework>false</Framework>
+            <DisplayName>Registry Browser</DisplayName>
+            <PublisherDisplayName>ch3cho</PublisherDisplayName>
+            <Description>A registry-browser application</Description>
+            <Logo>Assets\AppIcon.png</Logo>
+        </Properties>
+    </PackageInformation>
+    <SaveLocation PackagePath="registry-browser.msix" />
+    <PackageIntegrity>
+        <CertificatePath></CertificatePath>
+    </PackageIntegrity>
+</MsixPackagingToolTemplate>
