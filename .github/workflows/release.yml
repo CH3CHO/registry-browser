@@ -97,15 +97,50 @@ jobs:
           sha256sum * > SHA256SUMS.txt
           cat SHA256SUMS.txt
 
-      - name: Create GitHub Release
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
         run: |
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" artifacts/* --clobber
-          else
-            gh release create "$TAG" artifacts/* \
-              --title "$TAG" \
-              --generate-notes
+          set -euo pipefail
+
+          # 同一个 tag 可能对应多个 release（GitHub 允许同名草稿并存），
+          # 所以按 id 精确定位：优先已发布的那个，其次任意一个。
+          # 这里不能用 gh release view —— release job 没有 checkout 仓库，
+          # gh 无法从 git 远端推断仓库名，必须显式给 --repo。
+          RELEASE_ID=$(gh api "repos/${REPO}/releases" --jq "map(select(.tag_name == \"${TAG}\")) as \$rs | ((\$rs | map(select(.draft == false)) | first) // (\$rs | first) // {}) | .id // empty")
+
+          if [ -z "${RELEASE_ID}" ]; then
+            echo "::notice::release ${TAG} 不存在，创建新的"
+            gh release create "${TAG}" artifacts/* \
+              --title "${TAG}" \
+              --generate-notes \
+              --repo "${REPO}"
+            exit 0
           fi
+
+          echo "::notice::release ${TAG} 已存在 (id=${RELEASE_ID})，改为补传产物"
+
+          if [ "$(gh api "repos/${REPO}/releases/${RELEASE_ID}" --jq .draft)" = "true" ]; then
+            echo "::notice::该 release 还是草稿，先发布出去"
+            gh api -X PATCH "repos/${REPO}/releases/${RELEASE_ID}" -f draft=false > /dev/null
+          fi
+
+          # 按 release id 上传，避免同名 release 造成歧义；
+          # 同名资产先删后传，让重复触发保持幂等。
+          for file in artifacts/*; do
+            name=$(basename "${file}")
+
+            for asset_id in $(gh api "repos/${REPO}/releases/${RELEASE_ID}/assets" --jq ".[] | select(.name == \"${name}\") | .id"); do
+              echo "::notice::删除同名旧资产 ${name} (id=${asset_id})"
+              gh api -X DELETE "repos/${REPO}/releases/assets/${asset_id}" > /dev/null
+            done
+
+            echo "::notice::上传 ${name}"
+            curl -fsSL -X POST \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Content-Type: application/octet-stream" \
+              "https://uploads.github.com/repos/${REPO}/releases/${RELEASE_ID}/assets?name=${name}" \
+              --data-binary "@${file}" > /dev/null
+          done
