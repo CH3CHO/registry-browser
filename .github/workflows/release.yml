@@ -1,0 +1,104 @@
+name: Release
+
+# 推送形如 v1.2.3 的 tag 时构建各平台产物并发布 GitHub Release。
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.asset }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            goarch: amd64
+            asset: registry-browser-windows-amd64.exe
+            binary: bin/registry-browser.exe
+          - os: macos-15
+            goarch: arm64
+            asset: registry-browser-darwin-arm64
+            binary: bin/registry-browser
+          - os: macos-15-intel
+            goarch: amd64
+            asset: registry-browser-darwin-amd64
+            binary: bin/registry-browser
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install wails3
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@v3.1.0
+
+      - name: Sync version from tag
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          sed -i "s/^  version: .*/  version: \"${VERSION}\"/" build/config.yml
+          wails3 task common:update:build-assets
+
+      - name: Build
+        shell: bash
+        run: wails3 build
+
+      - name: Collect artifact
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp "${{ matrix.binary }}" "dist/${{ matrix.asset }}"
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: dist/${{ matrix.asset }}
+          if-no-files-found: error
+
+  release:
+    name: publish release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Checksums
+        run: |
+          cd artifacts
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" artifacts/* --clobber
+          else
+            gh release create "$TAG" artifacts/* \
+              --title "$TAG" \
+              --generate-notes
+          fi
